@@ -1,0 +1,22 @@
+# Build artifacts
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Pi local state
+.pi/
+.pi-lens/
+
+# Claude Code local state
+.claude/settings.local.json
+.claude/cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Benchmark temp output
+benchmarks/.tmp/

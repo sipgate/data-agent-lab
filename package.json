@@ -1,0 +1,12 @@
+{
+  "name": "agent-lab",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Lab for coding-agent extensions, skills, prompts, and benchmarks.",
+  "keywords": ["pi-package"],
+  "pi": {
+    "extensions": ["./extensions"],
+    "skills": ["./skills"],
+    "prompts": ["./prompts"]
+  }
+}
