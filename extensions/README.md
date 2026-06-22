@@ -1,5 +1,10 @@
-# Pi extensions live here. One file per extension (.ts or .js)
+# Extensions
 
-# Pi auto-discovers .ts and .js files in this directory
+Pi TypeScript extensions live in subdirectories here. Each one has an `index.ts` entry point and a `README.md`.
 
-# See: <https://pi.dev/docs/latest/extensions>
+- `web-distill/` — overrides Pi's `fetch_content` and `web_search` with a local smart-fetch script.
+- `cortecs/` — registers the Cortecs AI provider.
+
+Pi auto-discovers both `*.ts` files and `*/index.ts` entries in this directory via the `pi` manifest in the repo root `package.json`.
+
+See [`../docs/extensions.md`](../docs/extensions.md) for the full guide: loading, dev workflow, and migrating from loose `~/.pi/agent/extensions/` files.

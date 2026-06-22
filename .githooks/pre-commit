@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Pre-commit hook: run skills/symlink sanity checks.
+# Install once with: git config core.hooksPath .githooks
+set -euo pipefail
+"$(git rev-parse --show-toplevel)/scripts/check-skills.sh"

@@ -20,8 +20,8 @@ RESULTS_DIR="$ROOT/results"
 mkdir -p "$RESULTS_DIR"
 
 if [[ ! -f "$TASK_FILE" ]]; then
-  echo "Task not found: $TASK_FILE" >&2
-  exit 1
+	echo "Task not found: $TASK_FILE" >&2
+	exit 1
 fi
 
 DATE="$(date -u +%Y-%m-%d)"
@@ -49,7 +49,7 @@ PASS="unknown"
 END_EPOCH=$(date -u +%s.%N)
 WALL_S=$(awk "BEGIN{printf \"%.2f\", $END_EPOCH - $START_EPOCH}")
 
-cat > "$OUT" <<EOF
+cat >"$OUT" <<EOF
 {
   "task": "$TASK",
   "model": "$MODEL",

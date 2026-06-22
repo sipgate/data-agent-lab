@@ -19,6 +19,8 @@ agent-lab/
 ├── CLAUDE.md → AGENTS.md     # symlink (Claude Code)
 ├── package.json              # Pi package manifest
 ├── extensions/               # Pi TypeScript extensions
+│   ├── web-distill/          #   overrides fetch_content + web_search
+│   └── cortecs/               #   registers the cortecs provider
 ├── skills/                   # SKILL.md skills (canonical — both agents)
 ├── .claude/
 │   ├── skills → ../skills    # symlink (Claude Code reads SKILL.md too)
@@ -30,24 +32,26 @@ agent-lab/
 │   ├── results/              # run results (JSON)
 │   ├── scripts/              # runner + summary
 │   └── README.md
+├── scripts/check-skills.sh   # pre-commit skill/symlink sanity checks
 └── docs/
+    ├── setup.md              # full install guide (Python, Browserless, Pi)
+    ├── extensions.md         # Pi extension layout + migration from loose files
+    └── skills.md             # how to write skills that work on Pi + Claude Code
 ```
 
-## Use with Pi
+## Getting started
 
-Install this repo as a Pi package:
+See [`docs/setup.md`](docs/setup.md) for the full install guide. TL;DR:
 
 ```bash
-pi install git:github.com/martjn-net/agent-lab
-# or locally:
-pi install ./path/to/agent-lab
+pi install ~/projects/agent-lab
 ```
 
-Pi will discover `extensions/`, `skills/`, and `prompts/` via the `pi` manifest in `package.json`.
+Pi will discover `extensions/`, `skills/`, and `prompts/` via the `pi` manifest in `package.json`. If you're migrating these extensions out of `~/.pi/agent/extensions/`, follow [`docs/extensions.md`](docs/extensions.md) so you don't end up with duplicate copies loaded.
 
 ## Use with Claude Code
 
-Open the repo in Claude Code. It reads `CLAUDE.md` (→ `AGENTS.md`) and discovers skills via `.claude/skills` (→ `skills/`). Slash commands live in `.claude/commands/`.
+Open the repo in Claude Code. It reads `CLAUDE.md` (→ `AGENTS.md`) and discovers skills via `.claude/skills` (→ `skills/`). Slash commands live in `.claude/commands/`. See [`docs/skills.md`](docs/skills.md) for the skill-writing conventions that keep both agents in sync.
 
 ## Benchmarks
 
