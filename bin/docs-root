@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Prints the absolute path to the docs root.
+# Same resolution logic as `wiki-root` but with /docs at the end.
+set -euo pipefail
+
+if [[ -n "${DUC_DOCS_ROOT:-}" ]]; then
+  printf '%s\n' "$DUC_DOCS_ROOT"
+  exit 0
+fi
+
+if repo_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+  printf '%s/docs\n' "$repo_root"
+  exit 0
+fi
+
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+printf '%s/docs\n' "$(dirname "$script_dir")"

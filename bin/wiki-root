@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Prints the absolute path to the wiki root.
+# Resolution order:
+#   1. $DUC_WIKI_ROOT environment variable
+#   2. <cwd-repo-root>/wiki  (repo-root via `git rev-parse` run in the CWD —
+#      this is the *caller's* repo, not the script's location, so the helper
+#      resolves against the repo the skill is actually operating on)
+#   3. <bin-parent>/wiki (script-relative fallback for non-git checkouts)
+set -euo pipefail
+
+if [[ -n "${DUC_WIKI_ROOT:-}" ]]; then
+  printf '%s\n' "$DUC_WIKI_ROOT"
+  exit 0
+fi
+
+# Resolve against the CWD's git repo (the repo the caller is operating on),
+# NOT the script's own location. This is what makes the helper cross-repo:
+# a skill running in repo A finds A/wiki, even though the script lives in
+# agent-lab/bin (possibly via a per-repo bin/ symlink).
+if repo_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+  printf '%s/wiki\n' "$repo_root"
+  exit 0
+fi
+
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+printf '%s/wiki\n' "$(dirname "$script_dir")"

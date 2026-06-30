@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Lists wiki pages whose YAML frontmatter `updated:` field is older than N days.
+#
+# Usage: wiki-stale-pages [DAYS]   (default: 180)
+set -euo pipefail
+
+days="${1:-180}"
+case "$days" in
+  -h|--help)
+    sed -n '2,5p' "$0" | sed 's/^# \{0,1\}//'
+    exit 0
+    ;;
+esac
+
+bin_dir="$(cd "$(dirname "$0")" && pwd)"
+wiki_root="$("$bin_dir/wiki-root")"
+[[ -d "$wiki_root" ]] || { echo "wiki root not found: $wiki_root" >&2; exit 1; }
+
+cutoff_epoch="$(date -d "$days days ago" +%s)"
+
+while IFS= read -r -d '' file; do
+  # Extract `updated: YYYY-MM-DD` from frontmatter (first 20 lines).
+  updated="$(head -n 20 "$file" | awk -F': *' '/^updated:/{print $2; exit}')"
+  [[ -z "$updated" ]] && continue
+  # Normalize quotes if present.
+  updated="${updated//\"/}"
+  updated="${updated//\'/}"
+  if file_epoch="$(date -d "$updated" +%s 2>/dev/null)"; then
+    if (( file_epoch < cutoff_epoch )); then
+      printf '%s\tupdated: %s\n' "$file" "$updated"
+    fi
+  fi
+done < <(find "$wiki_root" -type f -name '*.md' -print0)

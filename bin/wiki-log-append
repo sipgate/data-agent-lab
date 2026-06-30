@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Appends a structured entry to wiki/log.md.
+#
+# Usage:
+#   wiki-log-append OPERATION "TITLE" "DETAILS" "PAGES"
+#
+# OPERATION : ingest | query | lint | update | init
+# TITLE     : short heading (one line)
+# DETAILS   : prose describing what happened (multi-line OK; pass via "$()")
+# PAGES     : comma- or newline-separated list of touched pages
+#
+# Uses today's date (YYYY-MM-DD).
+set -euo pipefail
+
+if [[ $# -lt 4 ]] || [[ "${1:-}" == "-h" ]] || [[ "${1:-}" == "--help" ]]; then
+  sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
+  exit 0
+fi
+
+op="$1"
+title="$2"
+details="$3"
+pages="$4"
+
+case "$op" in
+  ingest|query|lint|update|init) ;;
+  *) echo "wiki-log-append: unknown operation '$op'" >&2; exit 2 ;;
+esac
+
+bin_dir="$(cd "$(dirname "$0")" && pwd)"
+log_file="$("$bin_dir/wiki-root")/log.md"
+[[ -f "$log_file" ]] || { echo "log file not found: $log_file" >&2; exit 1; }
+
+user_name="${DUC_WIKI_USER:-$(whoami)}"
+today="$(date +%Y-%m-%d)"
+
+{
+  printf '\n## [%s] %s | %s\n' "$today" "$op" "$title"
+  printf -- '- **User:** %s\n' "$user_name"
+  printf -- '- **Details:** %s\n' "$details"
+  printf -- '- **Seiten:** %s\n' "$pages"
+} >> "$log_file"
+
+printf 'appended log entry to %s\n' "$log_file"

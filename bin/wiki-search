@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Searches wiki/ and docs/ for a pattern.
+#
+# Usage:
+#   wiki-search [--in wiki|docs|both] [--qmd] PATTERN
+#
+# --in       : limit scope (default: both)
+# --qmd      : also call `qmd query "PATTERN"` if qmd is on PATH
+#
+# Returns matches in `grep -n` format (file:line:match).
+set -euo pipefail
+
+scope=both
+use_qmd=0
+pattern=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --in)    scope="$2"; shift 2 ;;
+    --qmd)   use_qmd=1; shift ;;
+    -h|--help)
+      sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0
+      ;;
+    --)      shift; pattern="$*"; break ;;
+    *)       pattern="$1"; shift ;;
+  esac
+done
+
+if [[ -z "$pattern" ]]; then
+  echo "wiki-search: missing PATTERN. See --help." >&2
+  exit 2
+fi
+
+bin_dir="$(cd "$(dirname "$0")" && pwd)"
+wiki_root="$("$bin_dir/wiki-root")"
+docs_root="$("$bin_dir/docs-root")"
+
+paths=()
+case "$scope" in
+  wiki)  paths=("$wiki_root") ;;
+  docs)  paths=("$docs_root") ;;
+  both)  paths=("$wiki_root" "$docs_root") ;;
+  *)     echo "wiki-search: --in must be wiki|docs|both" >&2; exit 2 ;;
+esac
+
+# Filter only directories that actually exist (defensive).
+existing=()
+for p in "${paths[@]}"; do
+  [[ -d "$p" ]] && existing+=("$p")
+done
+
+if [[ ${#existing[@]} -gt 0 ]]; then
+  grep -RIn --include='*.md' -- "$pattern" "${existing[@]}" || true
+fi
+
+if [[ "$use_qmd" -eq 1 ]] && command -v qmd >/dev/null 2>&1; then
+  echo "--- qmd ---"
+  qmd query "$pattern" || true
+fi

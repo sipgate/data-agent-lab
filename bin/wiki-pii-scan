@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+# Scans wiki/ (and optionally docs/) for likely PII patterns.
+# Lists hits as file:line:match. Exit code 1 if hits found, 0 if clean.
+#
+# Patterns:
+#   - IBAN-like: DE\d{20}
+#   - DE phone numbers: +49... or 0[1-9]\d{8,11}
+#   - Generic email: word@word.tld
+#
+# Allowlist: Patterns (substring match on the whole line) that suppress a hit.
+# Loaded from, in order:
+#   1. $DUC_PII_ALLOWLIST_FILE (env var, highest prio)
+#   2. <repo-root>/etc/pii-allowlist  (one pattern per line; # = comment)
+#   3. empty (default — strict: no allowlist, over-blocks rather than under-blocks)
+# Each non-empty, non-comment line is treated as a fixed substring; the scanner
+# builds an alternation regex `pat1|pat2|...` and skips any line matching it.
+# This makes the allowlist repo-local: a sipgate repo ships etc/pii-allowlist
+# with @sipgate.de etc., other repos run strict.
+#
+# Usage: wiki-pii-scan [--include-docs]
+set -euo pipefail
+
+include_docs=0
+case "${1:-}" in
+  --include-docs) include_docs=1 ;;
+  -h|--help)
+    sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//'
+    exit 0
+    ;;
+esac
+
+bin_dir="$(cd "$(dirname "$0")" && pwd)"
+paths=("$("$bin_dir/wiki-root")")
+[[ "$include_docs" -eq 1 ]] && paths+=("$("$bin_dir/docs-root")")
+
+existing=()
+for p in "${paths[@]}"; do
+  [[ -d "$p" ]] && existing+=("$p")
+done
+[[ ${#existing[@]} -eq 0 ]] && exit 0
+
+# --- Resolve allowlist file --------------------------------------------------
+allowlist_file=""
+if [[ -n "${DUC_PII_ALLOWLIST_FILE:-}" ]]; then
+  allowlist_file="$DUC_PII_ALLOWLIST_FILE"
+elif repo_root="$(git -C "$bin_dir" rev-parse --show-toplevel 2>/dev/null)"; then
+  # wiki-root resolves against the *caller's* repo; but pii-scan is invoked
+  # from the repo whose wiki/ we scan, so use that repo root. Fall back to
+  # the git root that owns bin_dir's target (i.e. the consuming repo).
+  caller_repo="$(git -C "${existing[0]}" rev-parse --show-toplevel 2>/dev/null || true)"
+  if [[ -n "$caller_repo" && -f "$caller_repo/etc/pii-allowlist" ]]; then
+    allowlist_file="$caller_repo/etc/pii-allowlist"
+  fi
+fi
+
+# Build exclude regex from allowlist (one substring per line; # = comment).
+exclude_regex=""
+if [[ -n "$allowlist_file" && -f "$allowlist_file" ]]; then
+  exclude_regex="$(grep -vE '^\s*(#|$)' "$allowlist_file" \
+    | sed -e 's/[[:space:]]*$//' -e '/^$/d' \
+    | paste -sd'|' -)"
+fi
+
+hits=0
+
+scan() {
+  local label="$1"; shift
+  local pattern="$1"; shift
+  local exclude="${1:-}"; shift || true
+
+  local raw
+  raw="$(grep -RIEn --include='*.md' -- "$pattern" "${existing[@]}" 2>/dev/null || true)"
+  [[ -z "$raw" ]] && return 0
+
+  if [[ -n "$exclude" ]]; then
+    raw="$(printf '%s\n' "$raw" | grep -Ev "$exclude" || true)"
+  fi
+  [[ -z "$raw" ]] && return 0
+
+  printf '\n[%s]\n%s\n' "$label" "$raw"
+  hits=1
+}
+
+# IBAN-like (German)
+scan "IBAN (DE\\d{20})" '\bDE[0-9]{20}\b'
+
+# DE phone: +49 followed by digits, or 0 followed by 9-12 digits.
+scan "Telefon" '(\+49[0-9 /()-]{6,}|\b0[1-9][0-9]{8,11}\b)' "$exclude_regex"
+
+# Email: anything@anything.tld.
+scan "E-Mail" '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' "$exclude_regex"
+
+exit $hits
