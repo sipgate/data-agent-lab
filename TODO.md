@@ -1,11 +1,11 @@
 # TODO
 
-Open work for `agent-lab`. Items grouped by area, with priority (P0 = next, P1 = soon, P2 = nice to have).
+Open work for `data-agent-lab`. Items grouped by area, with priority (P0 = next, P1 = soon, P2 = nice to have).
 
 ## Migration
 
 - [ ] **P0 — Execute the Pi migration** (`docs/extensions.md` step 1–3)
-  - [ ] In a fresh Pi session (not this one): `pi install /home/arens/projects/agent-lab`
+  - [ ] In a fresh Pi session (not this one): `pi install /home/arens/projects/data-agent-lab`
   - [ ] Remove loose copies: `rm ~/.pi/agent/extensions/web-distill.ts` and `rm -rf ~/.pi/agent/extensions/cortecs`
   - [ ] Restart `pi`, verify `/model` lists Cortecs models and `fetch_content` goes through `web-distill`
   - [ ] Verify no "duplicate tool" errors in Pi startup log
@@ -78,7 +78,7 @@ Open work for `agent-lab`. Items grouped by area, with priority (P0 = next, P1 =
 
 - [ ] **P1 — `CONTRIBUTING.md` + first-time setup for fresh clones**
   - `git config core.hooksPath .githooks` is currently only set on this machine — fresh clones get no hook.
-  - Add `CONTRIBUTING.md` covering: clone, `git config core.hooksPath .githooks`, `pi install /path/to/agent-lab` (or `git:github.com/martjn-net/agent-lab`), env vars (`$CORTECS_API_KEY`), the rule that `~/.pi/agent/models.json` is local-only (never committed).
+  - Add `CONTRIBUTING.md` covering: clone, `git config core.hooksPath .githooks`, `pi install /path/to/data-agent-lab` (or `git:github.com/sipgate/data-agent-lab`), env vars (`$CORTECS_API_KEY`), the rule that `~/.pi/agent/models.json` is local-only (never committed).
   - Reference it from `README.md` quickstart and `docs/setup.md`.
 
 - [ ] **P2 — GitHub Actions workflow**
@@ -96,8 +96,8 @@ Open work for `agent-lab`. Items grouped by area, with priority (P0 = next, P1 =
   - Prerequisite for the `npm publish` decision below and for `pi install git:...` to be well-formed for others.
 
 - [ ] **P1 — npm publish or stay local?**
-  - `package.json` has `"private": true`. If you want `pi install npm:agent-lab` to work for others, flip to `private: false`, add `version`, `repository`, `author`, `license` fields, and `npm publish`.
-  - If it stays personal, document that install is `pi install git:github.com/martjn-net/agent-lab` or local path only.
+  - `package.json` has `"private": true`. If you want `pi install npm:data-agent-lab` to work for others, flip to `private: false`, add `version`, `repository`, `author`, `license` fields, and `npm publish`.
+  - If it stays personal, document that install is `pi install git:github.com/sipgate/data-agent-lab` or local path only.
 
 - [ ] **P1 — Rework `AGENTS.md` to be operations-first**
   - Current `AGENTS.md` is mostly repo-layout description. Research (morphllm AGENTS.md spec, groff 3-tier) warns layout-heavy agent-memory files perform worse — every line should be info the agent can't derive from code/manifest/README.

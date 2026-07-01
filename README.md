@@ -1,4 +1,4 @@
-# agent-lab
+# data-agent-lab
 
 A versioned home for coding-agent **extensions, skills, prompts, and benchmarks**. Built around [Pi](https://pi.dev) (primary) with [Claude Code](https://code.claude.com) as a fallback — both read the same shared artifacts, agent-specific bits stay separate.
 
@@ -10,8 +10,8 @@ A versioned home for coding-agent **extensions, skills, prompts, and benchmarks*
 
 ```bash
 # 1. clone
-git clone https://github.com/martjn-net/agent-lab.git ~/projects/agent-lab
-cd ~/projects/agent-lab
+git clone https://github.com/sipgate/data-agent-lab.git ~/projects/data-agent-lab
+cd ~/projects/data-agent-lab
 
 # 2. enable the pre-commit hook (skill/symlink sanity checks)
 git config core.hooksPath .githooks
@@ -20,7 +20,7 @@ git config core.hooksPath .githooks
 pip install --user beautifulsoup4
 
 # 4. install this repo as a Pi package
-pi install ~/projects/agent-lab
+pi install ~/projects/data-agent-lab
 
 # 5. (if migrating from loose extensions) remove old copies in a fresh Pi session
 rm ~/.pi/agent/extensions/web-distill.ts
@@ -35,7 +35,7 @@ Full setup (Browserless for Chromium fallback, env vars, verification) → [`doc
 ## What's inside
 
 ```
-agent-lab/
+data-agent-lab/
 ├── AGENTS.md                  # canonical project memory (CLAUDE.md symlinks here)
 ├── extensions/                # Pi TypeScript extensions
 │   ├── web-distill/           #   overrides fetch_content + web_search
@@ -52,7 +52,7 @@ agent-lab/
 
 ## Use with Pi
 
-`pi install ~/projects/agent-lab` adds the repo to `~/.pi/agent/settings.json` → `packages`. Pi reads the `pi` manifest in `package.json` and auto-discovers `extensions/`, `skills/`, and `prompts/`. TypeScript loads via jiti — edit a `.ts` and `/reload`, no compile step.
+`pi install ~/projects/data-agent-lab` adds the repo to `~/.pi/agent/settings.json` → `packages`. Pi reads the `pi` manifest in `package.json` and auto-discovers `extensions/`, `skills/`, and `prompts/`. TypeScript loads via jiti — edit a `.ts` and `/reload`, no compile step.
 
 ## Use with Claude Code
 

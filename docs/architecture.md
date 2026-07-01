@@ -66,9 +66,9 @@ Pi reads the `pi` manifest in `package.json`:
 Install sources Pi accepts (in `settings.json` → `packages`):
 
 ```bash
-pi install /home/arens/projects/agent-lab       # local path (this repo)
-pi install git:github.com/martjn-net/agent-lab  # git
-pi install npm:agent-lab                        # npm (after publishing)
+pi install /home/arens/projects/data-agent-lab       # local path (this repo)
+pi install git:github.com/sipgate/data-agent-lab  # git
+pi install npm:data-agent-lab                        # npm (after publishing)
 ```
 
 ## Migration footgun

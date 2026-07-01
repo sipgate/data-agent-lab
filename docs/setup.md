@@ -5,8 +5,8 @@ Get this repo working with Pi on a fresh Linux machine.
 ## 1. Clone
 
 ```bash
-git clone https://github.com/martjn-net/agent-lab.git ~/projects/agent-lab
-cd ~/projects/agent-lab
+git clone https://github.com/sipgate/data-agent-lab.git ~/projects/data-agent-lab
+cd ~/projects/data-agent-lab
 ```
 
 ## 2. Python dependencies (for `web-distill`)
@@ -50,7 +50,7 @@ Add these to `~/.bashrc` / `~/.zshrc` / your shell profile.
 ## 5. Install the repo as a Pi package
 
 ```bash
-pi install ~/projects/agent-lab
+pi install ~/projects/data-agent-lab
 ```
 
 This adds the repo to `~/.pi/agent/settings.json` → `packages`. Pi reads the `pi` manifest in `package.json` and loads `extensions/`, `skills/`, `prompts/`.

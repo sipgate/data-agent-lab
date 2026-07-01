@@ -1,5 +1,5 @@
 {
-  "name": "agent-lab",
+  "name": "data-agent-lab",
   "version": "0.0.0",
   "private": true,
   "description": "Lab for coding-agent extensions, skills, prompts, and benchmarks.",

@@ -21,7 +21,7 @@ The repo's `package.json` declares the `pi` manifest:
 
 ```json
 {
-  "name": "agent-lab",
+  "name": "data-agent-lab",
   "keywords": ["pi-package"],
   "pi": {
     "extensions": ["./extensions"],
@@ -42,7 +42,7 @@ The migration is three steps:
 ### 1. Install this repo as a Pi package
 
 ```bash
-pi install /home/arens/projects/agent-lab
+pi install /home/arens/projects/data-agent-lab
 ```
 
 This appends the repo path to `packages` in `~/.pi/agent/settings.json`:
@@ -53,7 +53,7 @@ This appends the repo path to `packages` in `~/.pi/agent/settings.json`:
     "npm:pi-subagents",
     "npm:pi-mcp-adapter",
     "npm:pi-lens",
-    "/home/arens/projects/agent-lab"
+    "/home/arens/projects/data-agent-lab"
   ]
 }
 ```
@@ -115,9 +115,9 @@ See the [Pi extensions docs](https://pi.dev/docs/latest/extensions) for the full
 Because the repo has `keywords: ["pi-package"]` and a `pi` manifest, it can also be installed from a remote:
 
 ```bash
-pi install git:github.com/martjn-net/agent-lab
+pi install git:github.com/sipgate/data-agent-lab
 # or after publishing to npm:
-pi install npm:agent-lab
+pi install npm:data-agent-lab
 ```
 
 For private use, the local path install above is enough.

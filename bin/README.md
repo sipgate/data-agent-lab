@@ -2,7 +2,7 @@
 
 Deterministische CLI-Tools fuer die Wiki-Workflows. Jeder LLM-Harness mit Bash-Zugriff (Claude Code, [Pi](https://pi.dev), Codex, plain Shell ...) kann sie aufrufen — die Skills wickeln die LLM-getriebenen Schritte drumherum.
 
-> **Kanonischer Ort:** Diese Helfer leben kanonisch im [agent-lab](../)-Repo unter `bin/`. Ein Wiki-Repo (z.B. etl-scripts, controlling, operations) konsumiert sie ueber einen **per-user `bin/`-Symlink** auf `agent-lab/bin/` (analog zu `.claude/skills`). Setup siehe unten.
+> **Kanonischer Ort:** Diese Helfer leben kanonisch im [data-agent-lab](../)-Repo unter `bin/`. Ein Wiki-Repo (z.B. etl-scripts, controlling, operations) konsumiert sie ueber einen **per-user `bin/`-Symlink** auf `data-agent-lab/bin/` (analog zu `.claude/skills`). Setup siehe unten.
 
 ## Tools
 
@@ -24,7 +24,7 @@ Deterministische CLI-Tools fuer die Wiki-Workflows. Jeder LLM-Harness mit Bash-Z
 2. `$(git rev-parse --show-toplevel)/wiki` — **im CWD**, d.h. gegen das Repo, in dem der Skill laeuft (nicht gegen den Ort des Skripts)
 3. `<bin-parent>/wiki` (script-relativer Fallback fuer Tarball-Checkouts)
 
-Punkt 2 ist der entscheidende Hebel: ein Skill, der in `controlling/` laeuft, findet `controlling/wiki/` — obwohl das Skript selbst in `agent-lab/bin/` (oder einem per-repo-Symlink dorthin) liegt. So funktionieren die wiki-Skills in *jedem* Repo mit `wiki/`+`docs/`, ohne Pfad-Hardcodierung.
+Punkt 2 ist der entscheidende Hebel: ein Skill, der in `controlling/` laeuft, findet `controlling/wiki/` — obwohl das Skript selbst in `data-agent-lab/bin/` (oder einem per-repo-Symlink dorthin) liegt. So funktionieren die wiki-Skills in *jedem* Repo mit `wiki/`+`docs/`, ohne Pfad-Hardcodierung.
 
 ## PII-Allowlist (`wiki-pii-scan`)
 
@@ -42,7 +42,7 @@ Jedes Repo, das die wiki-Skills nutzen will, legt einen per-user `bin/`-Symlink 
 
 ```bash
 cd <repo>
-ln -s "$HOME/git/agent-lab/bin" bin
+ln -s "$HOME/git/data-agent-lab/bin" bin
 # ggf. in .gitignore aufnehmen:
 #   echo "bin" >> .gitignore
 ```

@@ -1,4 +1,4 @@
-# agent-lab
+# data-agent-lab
 
 A versioned home for coding-agent **extensions, skills, prompts, and benchmarks**. Pi is the primary agent; Claude Code is a fallback. Both read the same shared artifacts (skills, project memory); agent-specific bits stay separate.
 
