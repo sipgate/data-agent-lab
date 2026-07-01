@@ -105,11 +105,15 @@ function parseContext(stdout: string): string | null {
 }
 
 /** Race a promise against a timeout; resolves to fallback on expiry/error. */
-function withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
-	return Promise.race([
-		p,
-		new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
-	]).catch(() => fallback);
+async function withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
+	try {
+		return await Promise.race([
+			p,
+			new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+		]);
+	} catch {
+		return fallback;
+	}
 }
 
 // -- Module state (session-scoped) -----------------------------------------
