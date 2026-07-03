@@ -20,3 +20,7 @@ Thumbs.db
 
 # Benchmark temp output
 benchmarks/.tmp/
+
+# Python
+__pycache__/
+*.pyc

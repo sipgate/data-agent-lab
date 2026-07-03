@@ -16,21 +16,18 @@ Open work for `data-agent-lab`. Items grouped by area, with priority (P0 = next,
 
 ## Benchmarks
 
-- [ ] **P0 — Make `benchmarks/scripts/run.sh` real**
-  - Currently a stub: prints `TODO: wire up agent invocation`, sets `PASS="unknown"`, writes a result JSON with `null` metrics.
-  - Wire up actual Pi invocation: `pi -p "$(cat task.md)"` (print mode), capture stdout.
-  - Capture real metrics: `ttft_ms`, `tokens_per_s`, `input_tokens`, `output_tokens`, `wall_s`. Pi exposes usage in the assistant message; either parse it or use `pi --json` mode.
-  - Run the acceptance test from the task's `## Test cases` block against the generated code; set `pass_at_1` accordingly.
+- [x] **P0 — Make `benchmarks/scripts/run.sh` real** (done 2026-07-03)
+  - Logic now lives in `benchmarks/scripts/runner.py`; `run.sh` is a thin wrapper.
+  - Drives `pi --mode json -nt -p` (full metrics) or `claude -p --output-format json`. Stream-parses `ttft_ms` from the first `text_delta`, sums `input/output_tokens` + `cost_usd` from `agent_end` usage.
+  - Extracts the solution code block from the answer, appends the task's `## Test cases` block, runs it under `timeout_s`, sets `pass_at_1`. Exit `0` pass/no-test, `1` fail/error.
 
-- [ ] **P0 — Commit a result schema (`benchmarks/results/EXAMPLE.json`)**
-  - `benchmarks/results/` is empty (only `.gitkeep`); `run.sh` writes JSON but there's no documented shape. SWE-bench has an explicit predictions format — we need one too.
-  - Add `EXAMPLE.json` as a schema reference: all fields (`task`, `model`, `agent`, `run_id`, `ttft_ms`, `tokens_per_s`, `input_tokens`, `output_tokens`, `wall_s`, `pass_at_1`, `result`) with example values.
-  - Lets `run.sh` and the `benchmark-runner` skill validate output against a fixed contract.
+- [x] **P0 — Commit a result schema (`benchmarks/results/EXAMPLE.json`)** (done 2026-07-03)
+  - Documents all fields incl. `run_id`, `cost_usd`. `summary.py` skips it during aggregation.
 
-- [ ] **P0 — Run the first real benchmark** (the original goal: GLM speed test)
-  - `bash benchmarks/scripts/run.sh lru-cache glm-5.2 pi` once `run.sh` is real.
-  - Commit the result JSON under `benchmarks/results/`.
-  - Compare against a second model (e.g. Claude) to validate the harness.
+- [ ] **P0 — Run the first real benchmark** (the original goal: GLM speed test) — BLOCKED on credentials
+  - Harness is ready; verified end-to-end on the error path (no key → clean `error` result + exit 1). Live run needs a provider login.
+  - No API key in env or `~/.pi/agent/models.json`, `settings.json` provider is `null`. First: `pi /login` (or set `models.json` for the GLM provider, e.g. `zai`).
+  - Then: `bash benchmarks/scripts/run.sh lru-cache glm-4.6 pi zai`, commit the result JSON, compare against `... claude-opus-4-8 claude` to validate.
 
 - [ ] **P1 — Add more benchmark tasks**
   - Only `benchmarks/tasks/lru-cache.md` exists. Add:
@@ -39,8 +36,8 @@ Open work for `data-agent-lab`. Items grouped by area, with priority (P0 = next,
     - [ ] `binary-search.md` — iterative + recursive variants
   - Each task: frontmatter (`id`, `language`, `difficulty`, `timeout_s`) + spec + acceptance test cases.
 
-- [ ] **P2 — `benchmarks/results/.gitkeep` cleanup**
-  - Remove once the first real result JSON lands.
+- [x] **P2 — `benchmarks/results/.gitkeep` cleanup** (done 2026-07-03)
+  - Removed; `EXAMPLE.json` now keeps the dir tracked.
 
 ## Skills & Prompts
 

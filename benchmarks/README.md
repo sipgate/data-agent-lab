@@ -35,21 +35,30 @@ A run lives in `results/<YYYY-MM-DD>-<model>-<task>.json`:
   "agent": "pi",
   "started_at": "2026-06-22T10:30:00Z",
   "ended_at": "2026-06-22T10:31:12Z",
+  "run_id": "a1b2c3d4e5f6",
   "metrics": {
-    "ttft_ms": 420,
+    "wall_s": 72.1,
+    "ttft_ms": 420.0,
     "tokens_per_s": 87.5,
     "input_tokens": 312,
     "output_tokens": 540,
-    "wall_s": 72.1
+    "cost_usd": 0.00184
   },
   "result": "pass",
   "pass_at_1": true,
-  "notes": "..."
+  "notes": "acceptance test passed"
 }
 ```
 
+See `results/EXAMPLE.json` for the canonical schema. `tokens_per_s` is **decode throughput** (`output_tokens / (wall_s − ttft_s)`), so tool-call time doesn't dilute the speed number. `result` is one of `pass` / `fail` / `error` / `no-test`.
+
 ## Scripts
 
-`scripts/run.sh <task> <model>` — thin wrapper. Brings up the agent, feeds the task, captures timing, runs the acceptance check, writes the result JSON. Adapt to your agent/model setup.
+`scripts/run.sh <task> <model> [agent] [provider]` — entrypoint. Delegates to `runner.py`, which builds the prompt, drives the agent, stream-parses metrics, extracts the generated code, runs the acceptance test, and writes the result JSON. Exit `0` on pass/no-test, `1` on fail/error.
 
-`scripts/summary.py` — aggregates `results/*.json` into a table (per-model pass rate, mean tokens/s, mean TTFT).
+- `agent`: `pi` (default, full metrics via `--mode json`) or `claude` (`-p --output-format json`, no TTFT).
+- `provider`: pi provider for the model, e.g. `scripts/run.sh lru-cache glm-4.6 pi zai`.
+
+`scripts/runner.py` — the real driver. Also callable directly with `--task/--model/--agent/--provider` flags.
+
+`scripts/summary.py` — aggregates `results/*.json` (ignoring `EXAMPLE.json`) into a per-model table: pass rate, mean tokens/s, mean TTFT, mean wall, mean cost.
