@@ -47,6 +47,7 @@ const SCRIPTS = {
 	onCommit: `${JIRA_DIR}/onCommit.py`,
 	activityReminder: `${JIRA_DIR}/activityReminder.py`,
 	sessionEnd: `${JIRA_DIR}/sessionEnd.py`,
+	statusLine: `${JIRA_DIR}/statusLine.py`,
 } as const;
 
 const TIMEOUT = {
@@ -55,6 +56,7 @@ const TIMEOUT = {
 	onCommit: 12000, // one comment POST (fire-and-forget)
 	activityReminder: 8000, // throttled to every 5 edits
 	sessionEnd: 12000, // one comment POST (fire-and-forget)
+	statusLine: 5000, // context read + git rev-list, no Jira API
 } as const;
 
 // -- Helpers ----------------------------------------------------------------
@@ -217,4 +219,20 @@ export default function (pi: any) {
 		if (!isActive()) return;
 		runHook(SCRIPTS.sessionEnd, {}, TIMEOUT.sessionEnd).catch(() => {});
 	});
+
+	// 6) Statusline overlay — surface the active Jira ticket in the editor
+	//    status line (pi.dev + OMP; Claude Code uses .claude/statusLine.py).
+	//    Reuses statusLine.py (context read + drift calc, no Jira API). The
+	//    harness strips the ANSI color; the "[+N commits]" drift text stays.
+	const renderStatus = async (ctx) => {
+		if (!ctx?.ui?.setStatus) return; // headless / RPC: no status line
+		if (!isActive()) {
+			ctx.ui.setStatus("jira", undefined);
+			return;
+		}
+		const line = await runHook(SCRIPTS.statusLine, {}, TIMEOUT.statusLine);
+		ctx.ui.setStatus("jira", line || undefined);
+	};
+	pi.on("session_start", async (_event, ctx) => renderStatus(ctx));
+	pi.on("turn_end", async (_event, ctx) => renderStatus(ctx));
 }
