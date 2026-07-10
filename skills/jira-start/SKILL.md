@@ -8,6 +8,24 @@ allowed-tools: Bash, Read
 
 # Jira Ticket starten
 
+## Nur eine Jira-URL / einen Ticket-Key geprompted? → Nur lesen + Kontext setzen
+
+Wenn der User **nur eine Jira-URL oder einen Ticket-Key** schickt (ohne
+expliziten Arbeitsauftrag), gilt: **nur das Ticket lesen und den Session-Kontext
+setzen — mehr nicht.** Keine Arbeit beginnen, nicht weiter investigieren (kein
+BigQuery/Repo-Graben), keine naechsten Schritte vorschlagen, keine Transition.
+Danach kurz bestaetigen (Summary + gesetzter Kontext) und auf eine explizite
+Anweisung warten.
+
+```bash
+/usr/local/etl-scripts/jira/cli.py context set TICKET-KEY
+/usr/local/etl-scripts/jira/cli.py show TICKET-KEY
+```
+
+Der vollstaendige Ablauf unten (Ticket finden/erstellen, Transition auf „Doing",
+Arbeit beginnen) gilt **nur** bei explizitem `/jira-start <Beschreibung>` oder
+einem klaren Arbeitsauftrag.
+
 ## Wichtig: Ticket-Links
 
 Jede Erwaehnung eines Ticket-Keys gegenueber dem User MUSS als klickbarer Markdown-Link formatiert werden: `[DENG-123](https://sipgatede.atlassian.net/browse/DENG-123)`.
