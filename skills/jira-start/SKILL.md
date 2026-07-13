@@ -44,7 +44,7 @@ Falls "SKIP": Informiere den User dass Jira-Credentials oder users.conf-Eintrag 
 
 ## Ablauf
 
-1. **Suche** nach existierendem Ticket (escape-sicher, arbeitet auf dem Projekt des Users):
+1. **Suche** nach existierendem Ticket (escape-sicher; durchsucht **alle konfigurierten Projekte** des Users, per `--project KEY` eingrenzbar):
 
 ```bash
 /usr/local/etl-scripts/jira/cli.py find "$ARGUMENTS"
@@ -56,11 +56,14 @@ Falls "SKIP": Informiere den User dass Jira-Credentials oder users.conf-Eintrag 
 
 ```bash
 /usr/local/etl-scripts/jira/cli.py create "Kurzer Summary in einer Zeile"
+# Bei mehreren konfigurierten Projekten (X Boards) das Zielprojekt angeben:
+/usr/local/etl-scripts/jira/cli.py create --project BYL "Kurzer Summary"
 ```
 
-> **CLI-Falle (wichtig):** `create` akzeptiert genau **ein** Argument und nimmt **jeden** uebergebenen String als Summary — auch `--description`, `--help` oder andere Flag-aehnliche Strings. Das CLI hat **keine** Flags fuer Description, Labels o.ae.
+> **Projektwahl bei mehreren Boards:** Hat der User mehrere Projekte in `users.conf` (z. B. `DENG,BYL`), muss `create` wissen, wohin. Reihenfolge: `--project KEY` > Projekt des aktiven Kontext-Tickets > einziges konfiguriertes Projekt. Ist es mehrdeutig (mehrere Projekte, kein Hinweis), bricht `create` ab und verlangt `--project`. `find` durchsucht standardmaessig **alle** Projekte; mit `--project KEY` eingrenzen.
 >
-> - **Niemals** `--description`, `--help`, `--label` o.ae. an `create` haengen → das wuerde diesen String als Summary nehmen und ein Ghost-Ticket anlegen.
+> **CLI-Falle (wichtig):** `create` hat **nur** das Flag `--project`; es gibt **keine** Flags fuer Description/Labels. Unbekannte flag-artige Argumente (`--help`, `--description`, ...) werden **abgewiesen** (Exit 2) — sie landen nicht mehr als Summary im Ticket.
+>
 > - **Niemals** den vollen `$ARGUMENTS` (mehrzeilig, ggf. mit URLs) direkt als Summary verwenden — erst zu einem knappen Titel verdichten.
 > - Brauchst Du eine Description? **Nach** dem Create separat per `update` setzen:
 >

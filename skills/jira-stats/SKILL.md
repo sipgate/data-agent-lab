@@ -18,10 +18,10 @@ Liest `ai_session` Properties von Jira-Tickets und erstellt eine Auswertung.
 /usr/local/etl-scripts/jira/cli.py check
 ```
 
-PROJEKT aus dem Output entnehmen, dann die Tickets des Users suchen (oder enger filtern, wenn der User einen Zeitraum / ein einzelnes Ticket erwaehnt hat):
+Projekt(e) aus dem Output entnehmen — `check` listet bei mehreren Boards mehrere `Projekt=`-Zeilen. Dann die Tickets des Users suchen (bei mehreren Projekten `project in (...)`; enger filtern, wenn der User einen Zeitraum / ein einzelnes Ticket erwaehnt hat):
 
 ```bash
-/usr/local/etl-scripts/jira/cli.py search "project = PROJEKT AND assignee = currentUser() ORDER BY updated DESC"
+/usr/local/etl-scripts/jira/cli.py search "project in (DENG, BYL) AND assignee = currentUser() ORDER BY updated DESC"
 ```
 
 2. **Properties lesen (TSV-Output):**
