@@ -8,7 +8,13 @@ extensions/
 │   ├── index.ts
 │   ├── bin/web-distill   # the Python script it shells out to
 │   └── README.md
-└── cortecs/          # registers the cortecs provider
+├── cortecs/          # registers the cortecs provider
+│   ├── index.ts
+│   └── README.md
+├── jira/             # bridges Jira lifecycle hooks into Pi events
+│   ├── index.ts
+│   └── README.md
+└── slack/            # read-only Slack tools (list/history/threads/users/search)
     ├── index.ts
     └── README.md
 ```
