@@ -56,6 +56,12 @@ Open work for `data-agent-lab`. Items grouped by area, with priority (P0 = next,
 
 ## Extensions
 
+- [ ] **P1 — Slack token/access for the `slack` extension** (blocks read-only Slack usage)
+  - The `slack` extension itself works — verified `slack_auth_test` = ok as bot `alarm_report` (U069SKWCW0H) — but that bot is **`not_in_channel`** for the channels it is meant to read: `#data-engineering-monitoring` (C04S1RXASTV) and `#airbyte-monitoring` (C0ASJ07UMRQ). `slack_history`/`slack_replies` return `not_in_channel` there (same limitation as #obr).
+  - Token scopes are read-only: `channels:history,channels:read,groups:history,mpim:history,im:history,users:read` — no `channels:join` (cannot self-join) and no user token (so `slack_search` would need `search:read` on an `xoxp-…` token).
+  - Fix: (a) invite the bot into the target channels (`/invite @alarm_report`), or (b) provision a dedicated read-scoped Slack app + `SLACK_BOT_TOKEN` (plus an `xoxp-…` user token with `search:read` for `slack_search`).
+  - Until fixed, `/pipeline-check`'s Slack steps (1a/1a-2) have no data source and fall back to Loki only.
+
 - [ ] **P1 — Tests for `web-distill`**
   - Mock `execFile` and assert the tool calls the binary with `["fetch", url]` / `["search", query]`.
   - Test binary resolution order: `WEB_DISTILL_BIN` → bundled → `~/.local/bin`.
