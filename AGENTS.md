@@ -11,6 +11,7 @@ For the *why* behind these rules (portability matrix, sync design, migration rat
 - **Skills are the one portable artifact.** Both agents read the same `SKILL.md` via `skills/` (canonical) and `.claude/skills` (symlink). Don't duplicate skills.
 - **Slash commands and code extensions are NOT portable.** Keep Pi prompts in `prompts/`, Claude commands in `.claude/commands/`. `extensions/*.ts` is Pi-only.
 - **Benchmarks are agent-agnostic** — a task is a markdown spec, a run is a JSON result with model + metrics.
+- **Multi-user repo with per-user settings.** Checked out per user under their own `$HOME` and used by several people/agents across different machines. Everything committed MUST be user-neutral and portable — **never hardcode `/home/<user>` paths**. Per-user wiring (skills, `bin`, MCP config) lives in local, gitignored symlinks each user creates against their own checkout (see [`docs/setup.md`](docs/setup.md)); shared settings go in `.claude/settings.json` (committed), per-user overrides in `.claude/settings.local.json` (gitignored).
 
 ## Where things live
 
@@ -38,6 +39,7 @@ For the *why* behind these rules (portability matrix, sync design, migration rat
 - Never edit `CLAUDE.md` — edit `AGENTS.md`.
 - Never duplicate a skill across `skills/` and `.claude/` — the symlink handles it.
 - Keep skills agent-neutral. Agent-specific guidance goes here or in the `commands/`/`prompts/` dirs.
+- Keep everything committed user-neutral: no hardcoded `/home/<user>` paths and no per-user settings in the repo. Prefer relative/portable symlinks; per-user config belongs in `.claude/settings.local.json` (gitignored) or local symlinks.
 - Before deleting/migrating a Pi extension that's still in `~/.pi/agent/extensions/`, do it in a fresh Pi session — never mid-task (live tool overrides break otherwise).
 - Pre-commit runs `scripts/check-skills.sh`. It will block commits that break the skill/symlink invariants.
 - Pi extension API reference: `/home/arens/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/extensions.md` or [pi.dev/docs/latest/extensions](https://pi.dev/docs/latest/extensions).
