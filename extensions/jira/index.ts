@@ -29,9 +29,6 @@
  * filenames, so Pi and Claude do NOT collide.
  */
 import { execFile } from "node:child_process";
-import { promisify } from "node:util";
-
-const execFileAsync = promisify(execFile);
 
 // -- Configuration ----------------------------------------------------------
 
@@ -78,17 +75,19 @@ async function runHook(
 ): Promise<string> {
 	const stdin =
 		typeof payload === "string" ? payload : JSON.stringify(payload ?? {});
+	const { promise, resolve } = Promise.withResolvers<string>();
 	try {
-		const { stdout } = await execFileAsync(PYTHON, [script], {
-			input: stdin,
-			timeout: timeoutMs,
-			env: process.env, // inherit PATH (op), JIRA_*, etc.
-			maxBuffer: 1024 * 1024,
-		});
-		return (stdout ?? "").trim();
+		const child = execFile(
+			PYTHON,
+			[script],
+			{ timeout: timeoutMs, env: process.env, maxBuffer: 1024 * 1024 },
+			(_err, stdout) => resolve((stdout ?? "").toString().trim()),
+		);
+		child.stdin?.end(stdin);
 	} catch {
-		return "";
+		resolve("");
 	}
+	return promise;
 }
 
 /** Extract `additionalContext` from a hook's stdout (handles both shapes). */
