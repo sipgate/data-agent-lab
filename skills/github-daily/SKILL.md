@@ -37,7 +37,7 @@ echo "User=$LOGIN Datum=$DATE"
 
 Die folgenden Queries sind unabhaengig — in **einem** Tool-Block parallel starten. `$LOGIN`/`$DATE` aus Schritt 1 einsetzen.
 
-**2a) Commits** (author-date = der Tag). Datum steckt in `.commit.author.date`, Betreff in `.commit.message` (erste Zeile), Repo in `.repository.fullName`:
+**2a) Commits** (author-date = der Tag). Datum steckt in `.commit.author.date`, Betreff in `.commit.message` (erste Zeile), Repo in `.repository.fullName`, Kurz-SHA aus `.sha[0:7]`:
 
 ```bash
 gh search commits --owner sipgate --author "$LOGIN" --author-date "$DATE" \
@@ -96,8 +96,8 @@ Ergebnisse **deduplizieren** (eine PR kann in 2b–2e mehrfach auftauchen), **na
 _<X> Commits · <Y> Repos · <A> PRs (<a> geöffnet / <b> gemerged) · <N> Reviews_
 
 *<owner/repo>* (<n>)
-• `HH:MM` [<TICKET>] <Betreff>
-• `HH:MM` <Betreff ohne Ticket>
+• `HH:MM` `<sha7>` [<TICKET>] <Betreff>
+• `HH:MM` `<sha7>` <Betreff ohne Ticket>
 
 *<owner/repo2>* (<n>)
 • …
@@ -114,6 +114,7 @@ Tickets: <DENG-…, BYL-…> · Schwerpunkt: <Repo mit den meisten Aenderungen>
 Regeln zur Vorlage:
 - Leere Abschnitte weglassen (keine PRs → kein `*PRs*`-Block usw.).
 - Commits je Repo chronologisch; Repos mit den meisten Commits zuerst.
+- Kurz-SHA je Commit (`.sha[0:7]`, 7 Zeichen) in Backticks direkt nach der Zeit — kompakt und org-weit eindeutig genug für ein `git show <sha>` (volle 40-Zeichen-Hashes wären zu lang).
 - Ticket-Keys (`[A-Z]{2,}-\d+`) aus Commit-/PR-Titeln ziehen; die `Tickets:`-Zeile listet alle eindeutigen Keys des Tages.
 - Leerer Tag: nur die Kopfzeile + `_keine Aktivität am <Datum>_`.
 
