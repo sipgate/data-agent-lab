@@ -1,12 +1,14 @@
 ---
 name: metadata-destination-backup
-description: Erstellt ein mysqldump-Backup der Tabelle metadata.destination (Schema + Daten) in metadata/destination/backups/ mit datiertem Dateinamen, verifiziert es gegen die Live-Zeilenzahl und bietet optional einen Commit an.
+description: Erstellt ein mysqldump-Backup der Tabelle metadata.destination (Schema + Daten) in metadata/destination/backups/ mit datiertem Dateinamen, verifiziert es gegen die Live-Zeilenzahl und bietet optional einen Commit an. — Nutzen wenn vor riskanten Aenderungen/Migrationen an der Tabelle ein Sicherungspunkt gebraucht wird.
 user-invocable: true
 argument-hint: Optional "commit" um nach Verifikation direkt mit [no-ticket] zu committen
-allowed-tools: Bash, Read, mcp__mysql-dwh__execute_sql
+allowed-tools: Bash, mcp__mysql-dwh__execute_sql
 ---
 
 # metadata.destination Backup
+
+**Wann nutzen:** vor jeder schreibenden Aenderung an `metadata.destination` (z.B. vor dem Auffuellen) ein Backup anlegen.
 
 Sichert die manuell gepflegte Dimensionstabelle `metadata.destination` (mysql-dwh) als `mysqldump` in `metadata/destination/backups/`. Sinnvoll **vor** jeder schreibenden Aenderung an der Tabelle — z.B. vor [`/metadata-destination-fill`](../metadata-destination-fill/SKILL.md).
 

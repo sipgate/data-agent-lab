@@ -1,12 +1,14 @@
 ---
 name: jira-done
-description: Schliesst die Arbeit am aktuellen Jira-Ticket ab — Zusammenfassung, Status-Update
+description: Schliesst die Arbeit am aktuellen Jira-Ticket ab — Zusammenfassung, Status-Update — Nutzen wenn die Arbeit an einem Ticket abgeschlossen ist.
 user-invocable: true
 argument-hint: Optional Ticket-Key (sonst aus Session-Context)
 allowed-tools: Bash, Read
 ---
 
 # Jira Ticket abschliessen
+
+**Wann nutzen:** Am Ende einer Arbeitseinheit, um Session-Statistiken zu schreiben und das Ticket abzuschliessen.
 
 ## Wichtig: Ticket-Links
 

@@ -1,12 +1,14 @@
 ---
 name: jira-stats
-description: AI-Session-Statistiken aus Jira auswerten — Kosten, Commits, Aenderungen ueber alle Tickets
+description: AI-Session-Statistiken aus Jira auswerten — Kosten, Commits, Aenderungen ueber alle Tickets — Nutzen wenn eine Auswertung/Reporting der AI-Sessions gebraucht wird.
 user-invocable: true
 argument-hint: Optional Zeitraum oder Filter z.B. "letzte 30 Tage", "DENG-336"
 allowed-tools: Bash
 ---
 
 # Jira AI Session Stats
+
+**Wann nutzen:** Fuer Auswertung und Reporting der AI-Session-Kosten und -Aenderungen ueber Tickets hinweg.
 
 Liest `ai_session` Properties von Jira-Tickets und erstellt eine Auswertung.
 

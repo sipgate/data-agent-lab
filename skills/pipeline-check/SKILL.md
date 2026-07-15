@@ -1,12 +1,14 @@
 ---
 name: pipeline-check
-description: Prueft fehlgeschlagene ETL-Pipelines seit gestern 17 Uhr via Grafana Loki + Slack und zeigt Ursachen
+description: Prueft fehlgeschlagene ETL-Pipelines seit gestern 17 Uhr via Grafana Loki + Slack und zeigt Ursachen — Nutzen wenn morgendlicher Failure-Check ansteht.
 user-invocable: true
 argument-hint: Optional Zeitraum z.B. "48h" oder "heute" (Standard seit gestern 17 Uhr)
-allowed-tools: mcp__grafana__query_loki_logs, mcp__grafana__list_datasources, mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__slack_search_channels, mcp__claude_ai_Slack__slack_search_public_and_private, Bash, Read, Grep
+allowed-tools: mcp__grafana__query_loki_logs, mcp__grafana__query_loki_stats, mcp__grafana__list_datasources, mcp__mysql-dwh__execute_sql, slack_history, slack_list_channels, slack_search, Bash, Read, Grep
 ---
 
 # Pipeline Failure Check
+
+**Wann nutzen:** Beim morgendlichen Check, um alle seit gestern Abend fehlgeschlagenen ETL-Pipelines zu finden.
 
 Pruefe alle fehlgeschlagenen ETL-Jobs via Grafana Loki, ergaenze mit Kontext aus dem Slack-Channel `#data-engineering-monitoring` und erstelle einen strukturierten Fehlerbericht.
 

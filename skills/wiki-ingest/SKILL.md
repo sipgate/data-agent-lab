@@ -1,12 +1,14 @@
 ---
 name: wiki-ingest
-description: Erkenntnisse aus der aktuellen Session ins Wiki schreiben
+description: Erkenntnisse aus der aktuellen Session ins Wiki schreiben — Nutzen nach Sessions mit neuen Erkenntnissen.
 user-invocable: true
 argument-hint: "Thema oder Quelle (optional, sonst wird aus der Session abgeleitet)"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
 # Wiki Ingest
+
+**Wann nutzen:** Nach einer Session mit neuen Erkenntnissen, die ins Wiki gehoeren.
 
 Verarbeitet neues Wissen und integriert es in die Wiki Knowledge Base.
 

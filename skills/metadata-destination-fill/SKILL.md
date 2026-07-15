@@ -1,12 +1,14 @@
 ---
 name: metadata-destination-fill
-description: Fuellt fehlende Klassifizierung (group/subGroup + Laender-Attribute) in metadata.destination durch Vererbung von der laengsten bereits klassifizierten Land-Geschwisterzeile. Generiert UPDATE-Statements zum Review, wendet sie erst nach Bestaetigung an.
+description: Fuellt fehlende Klassifizierung (group/subGroup + Laender-Attribute) in metadata.destination durch Vererbung von der laengsten bereits klassifizierten Land-Geschwisterzeile. Generiert UPDATE-Statements zum Review, wendet sie erst nach Bestaetigung an. — Nutzen wenn in metadata.destination Klassifizierung (group/subGroup) fehlt.
 user-invocable: true
 argument-hint: Optional "apply" um nach dem Review direkt anzuwenden (Standard nur Vorschlag)
-allowed-tools: mcp__mysql-dwh__execute_sql, Read, Grep
+allowed-tools: mcp__mysql-dwh__execute_sql
 ---
 
 # Destination-Metadaten auffuellen
+
+**Wann nutzen:** wenn in `metadata.destination` Zeilen ohne Klassifizierung (`group`/`subGroup`) auftauchen und aufgefuellt werden sollen.
 
 Fuellt die leeren (NULL-) Zeilen in `metadata.destination` auf. Wiederkehrende Aufgabe: Der Cron-Job `metadata/destination/destination.py` (taeglich 06:15) fuegt automatisch neue Destination-Namen aus `billing20.statsAggregateMonthly` ein, die noch keine Konfiguration haben — diese landen mit nur gefuelltem PK `destination` und sonst NULL. `destination.py` mailt anschliessend eine Liste "destinations without config" (Bedingung `\`group\` is null`) an analytix@sipgate.de. Dieser Skill klassifiziert diese Zeilen automatisiert.
 

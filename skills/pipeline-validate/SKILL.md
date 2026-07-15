@@ -1,12 +1,14 @@
 ---
 name: pipeline-validate
-description: Prueft eine bestehende ETL-Pipeline gegen die Repository-Konventionen (Checkliste aus docs/pipelines/neue-pipeline-erstellen.md)
+description: Prueft eine bestehende ETL-Pipeline gegen die Repository-Konventionen (Checkliste aus docs/pipelines/neue-pipeline-erstellen.md) — Nutzen wenn eine bestehende Pipeline gegen die Konventionen geprueft werden soll.
 user-invocable: true
 argument-hint: Pfad zur Pipeline z.B. "featureos" oder "aggregation/accountData"
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
 # Pipeline validieren
+
+**Wann nutzen:** Wenn eine bestehende ETL-Pipeline gegen die Repository-Konventionen geprueft werden soll.
 
 Pruefe eine bestehende ETL-Pipeline gegen die Checkliste in `docs/pipelines/neue-pipeline-erstellen.md` (Abschnitt 12: "Checkliste: Pipeline-Launch").
 

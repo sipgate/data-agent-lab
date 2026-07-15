@@ -3,9 +3,12 @@ name: pipeline-visualize
 description: Analysiert den Code des AKTUELLEN Repos und (re)generiert eine visuelle Architektur-Doku (Default docs/architektur-diagramme.md) als Mermaid/C4. Repo-unabhängig — Diagramme werden aus dem CODE des jeweiligen Repos abgeleitet, nicht aus dem Gedächtnis. Nutzen nach größeren Umbauten oder wenn Diagramme veraltet wirken; wiederholbar.
 user-invocable: true
 argument-hint: Optional Ziel-Doc-Pfad (Default docs/architektur-diagramme.md)
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 ---
 
-# /pipeline-visualize — Architektur-Diagramme aus dem Code regenerieren
+# Pipeline Visualize — Architektur-Diagramme aus dem Code regenerieren
+
+**Wann nutzen:** Nach größeren Umbauten oder wenn die Architektur-Diagramme veraltet wirken.
 
 Regeneriert eine Architektur-Doku (Default `docs/architektur-diagramme.md`, oder der als Argument
 übergebene Pfad) als **Diagrams-as-Code** (Mermaid — GitHub rendert nativ, Änderungen sind

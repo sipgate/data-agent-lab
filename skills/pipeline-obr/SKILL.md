@@ -1,12 +1,14 @@
 ---
 name: pipeline-obr
-description: Erstellt den monatlichen OBR-Carrier-Report — Voraussetzungen pruefen, Berechnung, Datenvalidierung, Versand und Slack-Post
+description: Erstellt den monatlichen OBR-Carrier-Report — Voraussetzungen pruefen, Berechnung, Datenvalidierung, Versand und Slack-Post — Nutzen wenn der monatliche OBR-Report ansteht.
 user-invocable: true
 argument-hint: Optional Monat als YYYY-MM-01 (Standard ist der Vormonat)
-allowed-tools: Bash, Read, Grep, mcp__mysql-dwh__execute_sql, mcp__bigquery__execute_sql, mcp__grafana__query_loki_logs, mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__slack_send_message
+allowed-tools: Bash, Read, Grep, mcp__mysql-dwh__execute_sql, mcp__bigquery__execute_sql, mcp__grafana__query_loki_logs
 ---
 
 # OBR Monats-Report
+
+**Wann nutzen:** Einmal im Monat, wenn der OBR-Carrier-Report fuer den Vormonat erstellt und versendet werden soll.
 
 Fuehrt den monatlichen OBR-Workflow (Outbound Routing Reports) aus: Voraussetzungen pruefen, `cdr_incoming` berechnen, Daten validieren, Report versenden und die Zahlen im #obr-Channel posten. Hintergrund und Tabellen-Doku: `cdr/obr/README.md`.
 

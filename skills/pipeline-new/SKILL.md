@@ -1,12 +1,14 @@
 ---
 name: pipeline-new
-description: Erstellt eine neue ETL-Pipeline mit run.py, Script/SQL, Crontab-Eintrag und Monitoring-Setup
+description: Erstellt eine neue ETL-Pipeline mit run.py, Script/SQL, Crontab-Eintrag und Monitoring-Setup — Nutzen wenn eine neue ETL-Pipeline im Repo angelegt werden soll.
 user-invocable: true
 argument-hint: Name der Pipeline z.B. "myPipeline" oder "aggregation/myPipeline"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
 # Neue Pipeline erstellen
+
+**Wann nutzen:** Wenn eine neue ETL-Pipeline im Repo angelegt werden soll.
 
 Erstelle eine neue ETL-Pipeline nach den Repository-Konventionen. Referenz: `docs/pipelines/neue-pipeline-erstellen.md`.
 

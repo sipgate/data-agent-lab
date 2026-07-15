@@ -50,9 +50,9 @@ Open work for `data-agent-lab`. Items grouped by area, with priority (P0 = next,
 - [ ] **P2 — Second skill** beyond `benchmark-runner`
   - Candidate: `skills/extension-author/SKILL.md` — how to scaffold a new Pi extension in this repo (layout, `pi` manifest, `/reload` workflow, `check-skills.sh`).
 
-- [ ] **P2 — Use richer SKILL.md frontmatter (`allowed-tools`/`disallowed-tools`)**
-  - Current skills use only `name`+`description`. The fuller schema supports `allowed-tools`/`disallowed-tools` (security: restrict what a skill can invoke), `disable-model-invocation`, `user-invocable`.
-  - `benchmark-runner` should declare `allowed-tools: bash,read` so it can't edit files mid-benchmark. See `docs/skills.md` for the frontmatter reference.
+- [x] **P2 — Curated `allowed-tools` in every SKILL.md** (adopted 2026-07-14)
+  - Decision: keep a curated `allowed-tools` whitelist on every skill (Claude-Code sandboxing), reconciled with `docs/skills.md` (which no longer forbids it). `model`/`imports` stay out of frontmatter; `disable-model-invocation`/`disallowed-tools` remain available if ever needed.
+  - Rolled out across all 17 skills; naming per `docs/skills.md` (built-ins TitleCase, MCP `mcp__server__tool`, extension tools by registered name). Removed the dead `mcp__claude_ai_Slack__*` refs from `pipeline-check`/`pipeline-obr`.
 
 ## Extensions
 

@@ -36,9 +36,12 @@ When invoked, follow these steps:
 | Field | Required | Notes |
 |-------|----------|-------|
 | `name` | **yes** | Must match the folder name. `check-skills.sh` enforces this. |
-| `description` | **yes** | Claude Code uses this for **auto-triggering** — phrase it as "Do X. Use when …". Pi shows it in `/help` and skill listings. |
+| `description` | **yes** | Used for **auto-triggering** (Claude) and `/help` listings (Pi). Include a when-to-use trigger — German (`Nutze[n] wenn/nach …`) or English (`Use when …`). `check-skills.sh` advises (non-blocking) when it's missing. |
+| `user-invocable` | recommended | `true` for skills a user runs via slash command (all of ours). |
+| `argument-hint` | optional | One-line hint shown in `/help`; only when the skill takes an argument. |
+| `allowed-tools` | optional | Comma-separated whitelist of the tools the skill may call — a Claude-Code sandboxing property. Curate it to the tools the body actually uses. |
 
-**Keep frontmatter minimal.** Don't use agent-specific fields like `allowed-tools`, `model`, or `imports` — they're either ignored by one agent or interpreted differently. If you truly need agent-specific behavior, put it in the Markdown body as conditional instructions ("If you're Claude Code, also …"), not in frontmatter.
+**On `allowed-tools`.** Claude Code enforces this as a per-skill whitelist; Pi/omp currently treats it leniently. Keep it **accurate** (only tools the body uses) and use portable names: built-ins TitleCase (`Bash`, `Read`, `Grep`, …), MCP as `mcp__<server>__<tool>`, extension tools by their registered name (e.g. `slack_history`). Never list a tool or connector that doesn't exist in this ecosystem — a past bug had skills referencing a `mcp__claude_ai_Slack__*` connector that Pi/omp has no equivalent for. Still avoid `model` and `imports` in frontmatter: those genuinely differ or are ignored per agent — put agent-specific behavior in the Markdown body as conditional prose ("If you're Claude Code, also …") instead.
 
 ### Body conventions
 

@@ -1,12 +1,14 @@
 ---
 name: metadata-tariff-fill
-description: Fuellt fehlende Klassifizierung in metadata.tariff (tariffName is null) durch Vererbung vom laengsten bereits klassifizierten Praefix-Tarif. Generiert UPDATE-Statements zum Review, wendet sie erst nach Bestaetigung an.
+description: Fuellt fehlende Klassifizierung in metadata.tariff (tariffName is null) durch Vererbung vom laengsten bereits klassifizierten Praefix-Tarif. Generiert UPDATE-Statements zum Review, wendet sie erst nach Bestaetigung an. — Nutzen wenn in metadata.tariff Klassifizierung (tariffName) fehlt.
 user-invocable: true
 argument-hint: Optional "apply" um nach dem Review direkt anzuwenden (Standard nur Vorschlag)
-allowed-tools: mcp__mysql-dwh__execute_sql, Read, Grep, Bash
+allowed-tools: mcp__mysql-dwh__execute_sql, Bash
 ---
 
 # Tariff-Metadaten auffuellen
+
+**Wann nutzen:** wenn in `metadata.tariff` Zeilen ohne Klassifizierung (`tariffName`) auftauchen und aufgefuellt werden sollen.
 
 Fuellt die leeren (NULL-) Zeilen in `metadata.tariff` auf. Wiederkehrende Aufgabe: Der Cron-Job `metadata/tariff/tariff.py` fuegt automatisch neue Tarif-IDs aus `billing20.statsAggregateMonthly` ein, die noch keine Konfiguration haben — diese landen mit nur gefuelltem PK `tariff` (und `postpaid=0`) und sonst NULL. `tariff.py` mailt anschliessend eine Liste "tariffs without config" an <analytix@sipgate.de>. Dieser Skill klassifiziert diese Zeilen automatisiert.
 

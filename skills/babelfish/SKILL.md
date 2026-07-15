@@ -1,9 +1,13 @@
 ---
 name: babelfish
 description: Regeneriert die babelfish-Datenmodell-Doku (babelfish/docs/datenmodell.md) aus dem Katalog in BigQuery — zertifizierte/relevante Assets, ER-Diagramme aus den inferierten Foreign Keys, Pipeline-Lineage; alles als Mermaid. Nutzen nach FK-/Katalog-Änderungen oder wenn das Datenmodell veraltet wirkt — wiederholbar, Diagramme werden aus dem KATALOG (BQ) abgeleitet, nicht aus dem Gedächtnis.
+user-invocable: true
+allowed-tools: mcp__bigquery__execute_sql, Bash, Read, Write, Edit, browser
 ---
 
-# /babelfish — Datenmodell aus dem Katalog regenerieren
+# Babelfish — Datenmodell aus dem Katalog regenerieren
+
+**Wann nutzen:** Nach FK-/Katalog-Änderungen oder wenn das Datenmodell veraltet wirkt.
 
 Regeneriert `babelfish/docs/datenmodell.md` als **Diagrams-as-Code** (Mermaid — GitHub
 rendert nativ, Änderungen sind PR-diffbar). Quelle ist ausschließlich das babelfish-Dataset

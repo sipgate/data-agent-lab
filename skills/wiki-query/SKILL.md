@@ -1,12 +1,14 @@
 ---
 name: wiki-query
-description: Fragen gegen die Wiki Knowledge Base stellen
+description: Fragen gegen die Wiki Knowledge Base stellen — Nutzen wenn du das Wiki befragen willst.
 user-invocable: true
 argument-hint: "Frage an das Wiki (z.B. 'Welche Pipelines schreiben in BigQuery?')"
 allowed-tools: Read, Glob, Grep, Bash, Agent
 ---
 
 # Wiki Query
+
+**Wann nutzen:** Wenn du eine Frage an das Wiki stellen willst.
 
 Beantwortet Fragen auf Basis der Wiki Knowledge Base.
 

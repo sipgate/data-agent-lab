@@ -1,9 +1,14 @@
 ---
 name: benchmark-runner
 description: Run a benchmark task from benchmarks/tasks/ and record a result JSON. Use when the user wants to measure a model on a coding task.
+user-invocable: true
+argument-hint: "<task-id> <model> [agent] [provider]"
+allowed-tools: Bash, Read
 ---
 
-# Benchmark Runner Skill
+# Benchmark Runner
+
+**When to use:** When you want to measure a model on a coding task.
 
 When asked to run or record a benchmark:
 

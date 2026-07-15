@@ -1,12 +1,14 @@
 ---
 name: wiki-lint
-description: Wiki-Gesundheitscheck — findet Luecken, Widersprueche und verwaiste Seiten
+description: Wiki-Gesundheitscheck — findet Luecken, Widersprueche und verwaiste Seiten. Nutze bei regelmaessigem Gesundheitscheck.
 user-invocable: true
 argument-hint: "Optional: 'full' fuer ausfuehrlichen Check (Standard: quick)"
 allowed-tools: Read, Glob, Grep, Edit, Write, Bash
 ---
 
 # Wiki Lint
+
+**Wann nutzen:** Fuer einen regelmaessigen Gesundheitscheck der Wiki Knowledge Base.
 
 Prueft die Gesundheit der Wiki Knowledge Base und schlaegt Verbesserungen vor.
 

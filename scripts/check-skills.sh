@@ -56,7 +56,7 @@ else
 			fi
 			if [[ -z "$skill_desc" ]]; then
 				fail "skills/$name/SKILL.md: missing 'description' in frontmatter"
-			elif [[ ! "$skill_desc" =~ [Uu]se\ when|when\ the ]]; then
+			elif [[ ! "$skill_desc" =~ [Uu]se\ when|when\ the|[Nn]utze[nr]?\ (wenn|nach|bei)|[Ee]insetzen\ wenn ]]; then
 				info "skills/$name: description lacks 'Use when …' (Claude auto-trigger hint)"
 			fi
 		done

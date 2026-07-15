@@ -1,12 +1,14 @@
 ---
 name: jira-start
-description: Startet eine Arbeitseinheit — prüft/erstellt Jira-Ticket und setzt Status auf In Progress
+description: Startet eine Arbeitseinheit — prüft/erstellt Jira-Ticket und setzt Status auf In Progress — Nutzen wenn eine neue Arbeitseinheit beginnt.
 user-invocable: true
 argument-hint: Kurze Beschreibung der Aufgabe
 allowed-tools: Bash, Read
 ---
 
 # Jira Ticket starten
+
+**Wann nutzen:** Zu Beginn einer Arbeitseinheit, um das passende Jira-Ticket zu finden/erstellen und auf „In Progress" zu setzen.
 
 ## Nur eine Jira-URL / einen Ticket-Key geprompted? → Nur lesen + Kontext setzen
 
