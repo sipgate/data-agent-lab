@@ -74,6 +74,19 @@ Falls "SKIP": Informiere den User dass Jira-Credentials oder users.conf-Eintrag 
 > ...mehrzeilige Markdown-Description..."
 > ```
 
+**Description-Formatierung — Markdown, NICHT Jira-Wiki-Markup.** Jira **Cloud** rendert altes Server-Wiki-Markup nicht (es erscheint woertlich = kaputte Optik); `cli.py` wandelt **Markdown → ADF** (`jira/adf.py`). Descriptions und Kommentare also in Markdown schreiben:
+
+| statt Wiki-Markup | Markdown |
+|---|---|
+| `h3. Titel` | `### Titel` |
+| `{code:sql} … {code}` | Dreifach-Backtick-Block mit Sprache `sql` |
+| `{{monospace}}` | einfache Backticks `` `monospace` `` |
+| `(/)` / `(x)` | `- [x]` / `- [ ]` (Tasklist) |
+| Fett-Markup | `**fett**` |
+| Link | `[Text](url)` oder rohe URL |
+
+Vom Konverter unterstuetzt: `#`/`##`/`###`, `**fett**`, `` `code` ``, dreifach-Backtick-Codebloecke (mit optionaler Sprache), `-`/`*`-Listen, `- [ ]`-Tasklists, `[Text](url)`/rohe URLs. Alles andere — insbesondere jedes Wiki-Markup — landet als Klartext im Ticket.
+
 3. **Ticket-Key als Session-Kontext speichern** (Key aus `create` / `find`-Output):
 
 ```bash
