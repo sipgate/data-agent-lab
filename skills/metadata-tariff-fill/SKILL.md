@@ -159,6 +159,16 @@ Das Mapping aus Schritt 2 als Tabelle (child → parent → tariffName/segment/b
 - Parent ist sehr kurz / generisch (z.B. einstellige Zahl) und der Suffix lang → ggf. falscher Match, beim User rueckfragen.
 - `currentDePrice = 0.00` oder `isFreshInYear` wirkt unplausibel → nur Hinweis; diese beiden Felder werden von `tariff.py` ohnehin spaeter aus Billing neu abgeleitet (s.u.).
 
+### Schritt 4b — monthlyRecurring datenbasiert verifizieren (Sub-Skill)
+
+Bevor `monthlyRecurring` in Schritt 5 aus dem Parent uebernommen wird, den Wert **datenbasiert** gegen das Billing-Muster pruefen. Die Vererbung vom Prefix-Parent ist fuer die meisten Felder korrekt, kann aber ausgerechnet bei `monthlyRecurring` daneben liegen (realer Fall: AI-Agent-Overage-Tarife erbten `monthlyRecurring=1`, obwohl ihr Umsatz reiner Verbrauch/Overage ist → landete faelschlich in Fixed MRR und machte die Fixed-MRR-Retention kaputt).
+
+Dazu den Sub-Skill [`/metadata-tariff-check-monthly-recurring-flag`](../metadata-tariff-check-monthly-recurring-flag/SKILL.md) (Modus A) fuer die zu befuellenden Tarif-IDs aufrufen. Er ist read-only und liefert je Tarif ein datenbasiertes Verdict aus dem `billing20.statsAggregateDaily`-Muster: `1` = wiederkehrender Zeilen-Spike jeden 1. des Monats (Vertragsverlaengerung → MRR), `0` = ueber den Monat verteilt (Verbrauch → Metered), `ambig` = unklar/zu wenig Historie.
+
+- Verdict == geerbter `monthlyRecurring` → uebernehmen.
+- Verdict ≠ geerbt (**Mismatch**) → **nicht** blind erben: dem User den Konflikt zeigen (geerbter Wert vs. Billing-Muster + Kennzahlen) und den datenbasierten Wert vorschlagen.
+- `ambig` / neuer Tarif ohne Historie → beim geerbten Wert bleiben, aber als "nicht datenbelegt" markieren.
+
 ### Schritt 5 — Anwenden (nur nach Bestaetigung)
 
 Standardmaessig **nur Vorschlag**. Erst wenn der User bestaetigt (oder der Skill mit Argument `apply` aufgerufen wurde und der User den Vorschlag gesehen hat), die UPDATEs ausfuehren.
@@ -201,6 +211,8 @@ where n.tariff = '<CHILD>' and n.tariffName is null;
 ```
 
 `tariff` (PK) und `postpaid` werden bewusst **nicht** ueberschrieben.
+
+**monthlyRecurring bei Mismatch:** Hat Schritt 4b einen Konflikt ergeben und der User den datenbasierten Wert gewaehlt, im UPDATE `n.monthlyRecurring` auf diesen Wert setzen (statt `p.monthlyRecurring`) — die uebrigen Felder weiter vom Parent erben.
 
 ### Schritt 6 — Verifizieren
 
