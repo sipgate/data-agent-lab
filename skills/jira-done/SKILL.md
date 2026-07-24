@@ -51,6 +51,12 @@ Schaetze basierend auf der Konversation:
 
 Der Command berechnet Git-Stats aus dem Session-Kontext, schreibt sie als `ai_session`-Property (querybar via JQL) und postet einen formatierten Kommentar. Ohne `TICKET-KEY` wird der Session-Context verwendet.
 
+Braucht es zusätzlich einen **inhaltlichen** Kommentar (freie Zusammenfassung, nicht nur die Stats), nutze `add-comment` (Alias: `comment`):
+
+```bash
+/usr/local/etl-scripts/jira/cli.py add-comment TICKET-KEY "Was erledigt wurde — kurz und sachlich."
+```
+
 4. **Status transitieren** (Namen, keine IDs noetig):
 
 ```bash
